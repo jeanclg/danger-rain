@@ -20,22 +20,6 @@ function createTitleScreen() {
   return titleScreen;
 }
 
-function createGameOverScreen() {
-  const gameOverScreen = {
-    draw() {
-      ctx.font = "35px Verdana";
-      ctx.textAlign = "center";
-      ctx.fillStyle = "black";
-      ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2);
-    },
-    update() {},
-    click() {
-      changeScreen(screen.START);
-    },
-  };
-  return gameOverScreen;
-}
-
 function createPlayer() {
   const player = {
     x: canvas.width / 2 - 16,
@@ -110,7 +94,11 @@ function createEnemy() {
       // aplica a gravidade para cada inimigo criado
       enemy.spawnEnemy.forEach((i) => {
         i.y += enemy.gravity;
-        if (i.y + enemy.height >= floor.y) enemy.spawnEnemy.shift(); // verifica se o inimigo colide com o chão, se sim ele é deletado
+        // verifica se o inimigo colide com o chão, se sim ele é deletado e aumenta o score
+        if (i.y + enemy.height >= floor.y) {
+          enemy.spawnEnemy.shift();
+          globalAux.score.score++;
+        }
         // verifica a colisão do inimigo com o jogador, se sim vai para tela de game over
         if (
           i.y + enemy.height < globalAux.player.y + 5 ||
@@ -144,6 +132,42 @@ const floor = {
   },
 };
 
+// declarando o score
+function createScore() {
+  const scoreGame = {
+    score: 0,
+    draw() {
+      ctx.font = "50px Verdana";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "black";
+      ctx.fillText(scoreGame.score, canvas.width / 2, 60);
+    },
+    update() {},
+  };
+  return scoreGame;
+}
+
+function createGameOverScreen() {
+  const gameOverScreen = {
+    draw() {
+      ctx.font = "35px Verdana";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "black";
+      ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2);
+      ctx.fillText(
+        `Score: ${globalAux.score.score}`,
+        canvas.width / 2,
+        canvas.height / 2 + 40
+      );
+    },
+    update() {},
+    click() {
+      changeScreen(screen.START);
+    },
+  };
+  return gameOverScreen;
+}
+
 // objeto que guarda todas as telas do jogo
 const screen = {
   START: {
@@ -164,16 +188,19 @@ const screen = {
       ctx.clearRect(0, 0, canvas.width, canvas.height); // limpando a tela quando iniciado o jogo
       globalAux.player = createPlayer();
       globalAux.enemy = createEnemy();
+      globalAux.score = createScore();
     },
     draw() {
       bcg.draw();
       globalAux.player.draw();
       globalAux.enemy.draw();
+      globalAux.score.draw();
       floor.draw();
     },
     update() {
       globalAux.player.update();
       globalAux.enemy.update();
+      globalAux.score.update();
     },
     click() {
       globalAux.player.click();
