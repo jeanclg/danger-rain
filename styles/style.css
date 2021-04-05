@@ -1,11 +1,15 @@
 body {
   min-height: 100vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   background-color: #222831;
-  flex-direction: column;
   margin: 0;
+}
+
+div {
+  margin: 0;
+  padding: 0;
 }
 
 h1 {
@@ -14,11 +18,14 @@ h1 {
   color: #eeeeee;
   margin: 0;
   padding: 0;
-  padding-bottom: 130px;
+}
+
+.h1 {
+  padding: 0 69px;
 }
 
 #canvas {
   border: 1px solid #eeeeee;
   display: block;
-  margin: 0 auto;
+  margin: 0;
 }
