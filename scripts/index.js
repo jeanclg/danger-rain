@@ -1,6 +1,10 @@
+// instanciando o canvas
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+let frame = 0;
+
+// variável global auxiliar para ter acesso aos objetos criados em outras funções
 const globalAux = {};
 
 function createTitleScreen() {
@@ -39,17 +43,94 @@ function createPlayer() {
     width: 32,
     height: 32,
     color: "red",
+    speed: 3,
+    direction: "D",
     draw() {
       ctx.fillStyle = "green";
       ctx.fillRect(player.x, player.y, player.width, player.height);
     },
-    update() {},
+    update() {
+      this.movePlayer();
+      this.checkWall();
+    },
     click() {
-      changeScreen(screen.GAMEOVER);
+      this.changeDirection();
+    },
+    movePlayer() {
+      if (player.direction === "D") {
+        player.x += player.speed;
+      } else if (player.direction === "E") {
+        player.x -= player.speed;
+      }
+    },
+    changeDirection() {
+      if (player.direction === "D") player.direction = "E";
+      else if (player.direction === "E") player.direction = "D";
+    },
+    checkWall() {
+      if (player.x + player.width >= canvas.width) player.direction = "E";
+      if (player.x <= 0) player.direction = "D";
     },
   };
   return player;
 }
+
+function createEnemy() {
+  const enemy = {
+    x: 100,
+    y: 40,
+    width: 10,
+    height: 40,
+    color: "red",
+    gravity: 8,
+    spawnEnemy: [],
+    collisionCheck(obj) {
+      return !(
+        enemy.y + enemy.height < obj.y ||
+        enemy.y > obj.y + obj.height ||
+        enemy.x + enemy.width < obj.x ||
+        enemy.x > obj.x + obj.width
+      );
+    },
+    draw() {
+      enemy.spawnEnemy.forEach((i) => {
+        ctx.fillStyle = enemy.color;
+        ctx.fillRect(i.x, i.y, enemy.width, enemy.height);
+      });
+    },
+    update() {
+      // a cada x tempo instancia um novo inimigo numa posição random em X
+      const intervalFrame = frame % 60 === 0;
+      if (intervalFrame) {
+        enemy.spawnEnemy.push({
+          x: Math.floor(Math.random() * canvas.width) + 10,
+          y: -40,
+        });
+      }
+      // aplica a gravidade para cada inimigo criado
+      enemy.spawnEnemy.forEach((i) => {
+        i.y += enemy.gravity;
+        if (i.y + enemy.height >= floor.y) enemy.spawnEnemy.shift(); // verifica se o inimigo colide com o chão, se sim ele é deletado
+        // verifica a colisão do inimigo com o jogador, se sim vai para tela de game over
+        if (
+          i.y + enemy.height < globalAux.player.y + 5 ||
+          i.x + enemy.width < globalAux.player.x + 5 ||
+          i.x > globalAux.player.x + globalAux.player.width - 5
+        ) {
+        } else {
+          changeScreen(screen.GAMEOVER);
+        }
+      });
+    },
+  };
+  return enemy;
+}
+
+const bcg = {
+  draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  },
+};
 
 const floor = {
   x: 0,
@@ -58,11 +139,12 @@ const floor = {
   height: 150,
   color: "black",
   draw() {
-    ctx.fillStyle = "black";
+    ctx.fillStyle = floor.color;
     ctx.fillRect(floor.x, floor.y, floor.width, floor.height);
   },
 };
 
+// objeto que guarda todas as telas do jogo
 const screen = {
   START: {
     begin() {
@@ -81,12 +163,18 @@ const screen = {
     begin() {
       ctx.clearRect(0, 0, canvas.width, canvas.height); // limpando a tela quando iniciado o jogo
       globalAux.player = createPlayer();
+      globalAux.enemy = createEnemy();
     },
     draw() {
+      bcg.draw();
       globalAux.player.draw();
+      globalAux.enemy.draw();
       floor.draw();
     },
-    update() {},
+    update() {
+      globalAux.player.update();
+      globalAux.enemy.update();
+    },
     click() {
       globalAux.player.click();
     },
@@ -119,11 +207,14 @@ function changeScreen(newScreen) {
   if (currentScreen.begin) currentScreen.begin();
 }
 
+// função que atualiza os frames da tela a cada instante
 function loop() {
   currentScreen.draw();
   currentScreen.update();
+  frame++;
   requestAnimationFrame(loop);
 }
 
+// inicia o jogo
 changeScreen(screen.START);
 loop();
