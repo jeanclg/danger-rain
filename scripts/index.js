@@ -7,6 +7,20 @@ let frame = 0;
 // variável global auxiliar para ter acesso aos objetos criados em outras funções
 const globalAux = {};
 
+function createDifficulty() {
+  const dif = {
+    interval: 60,
+    checkInterval() {
+      if (frame > 500 && frame < 1000) dif.interval = 40;
+      if (frame > 1000) dif.interval = 20;
+    },
+    update() {
+      this.checkInterval();
+    },
+  };
+  return dif;
+}
+
 function createTitleScreen() {
   const titleScreen = {
     draw() {
@@ -66,7 +80,8 @@ function createEnemy() {
     width: 10,
     height: 40,
     color: "red",
-    gravity: 8,
+    gravity: 0.3,
+    speed: 0,
     spawnEnemy: [],
     collisionCheck(obj) {
       return !(
@@ -83,19 +98,26 @@ function createEnemy() {
       });
     },
     update() {
+      console.log(globalAux.difficulty.interval);
       // a cada x tempo instancia um novo inimigo numa posição random em X
-      const intervalFrame = frame % 60 === 0;
+      const intervalFrame = frame % globalAux.difficulty.interval === 0;
       if (intervalFrame) {
         enemy.spawnEnemy.push({
-          x: Math.floor(Math.random() * canvas.width) + 10,
+          x: Math.floor(
+            Math.random() * (canvas.width - enemy.width - enemy.width + 1) +
+              enemy.width
+          ),
           y: -40,
+          speed: 0,
         });
       }
       // aplica a gravidade para cada inimigo criado
       enemy.spawnEnemy.forEach((i) => {
-        i.y += enemy.gravity;
+        i.speed += enemy.gravity;
+        i.y += i.speed;
+        // i.y += enemy.gravity;
         // verifica se o inimigo colide com o chão, se sim ele é deletado e aumenta o score
-        if (i.y + enemy.height >= floor.y) {
+        if (i.y + enemy.height >= floor.y + 10) {
           enemy.spawnEnemy.shift();
           globalAux.score.score++;
         }
@@ -172,6 +194,7 @@ function createGameOverScreen() {
 const screen = {
   START: {
     begin() {
+      frame = 0;
       ctx.clearRect(0, 0, canvas.width, canvas.height); // limpando a tela quando iniciado o jogo
       globalAux.startScreen = createTitleScreen();
     },
@@ -186,12 +209,14 @@ const screen = {
   GAME: {
     begin() {
       ctx.clearRect(0, 0, canvas.width, canvas.height); // limpando a tela quando iniciado o jogo
+      globalAux.difficulty = createDifficulty();
       globalAux.player = createPlayer();
       globalAux.enemy = createEnemy();
       globalAux.score = createScore();
     },
     draw() {
       bcg.draw();
+      globalAux.difficulty.update();
       globalAux.player.draw();
       globalAux.enemy.draw();
       globalAux.score.draw();
