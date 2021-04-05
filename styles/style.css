@@ -3,10 +3,22 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #222831;
+  flex-direction: column;
+  margin: 0;
+}
+
+h1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 70px;
+  color: #eeeeee;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 130px;
 }
 
 #canvas {
-  border: 1px solid black;
+  border: 1px solid #eeeeee;
   display: block;
   margin: 0 auto;
 }

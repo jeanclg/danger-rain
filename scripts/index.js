@@ -27,10 +27,21 @@ function createDifficulty() {
 function createTitleScreen() {
   const titleScreen = {
     draw() {
-      ctx.font = "35px Verdana";
+      ctx.font = "28px Montserrat";
       ctx.textAlign = "center";
-      ctx.fillStyle = "black";
-      ctx.fillText("TAP TO START", canvas.width / 2, canvas.height / 2);
+      ctx.fillStyle = "#eeeeee";
+      ctx.fillText("CLICK TO CHANGE", canvas.width / 2, canvas.height / 2 - 50);
+      ctx.fillText(
+        "PLAYER DIRECTION",
+        canvas.width / 2,
+        canvas.height / 2 - 10
+      );
+      ctx.font = "20px Montserrat";
+      ctx.fillText(
+        "CLICK TO START",
+        canvas.width / 2,
+        canvas.height / 2 - 10 + 200
+      );
     },
     update() {},
   };
@@ -43,11 +54,11 @@ function createPlayer() {
     y: canvas.height - 182,
     width: 32,
     height: 32,
-    color: "red",
+    color: "#00adb5",
     speed: 3,
     direction: "D",
     draw() {
-      ctx.fillStyle = "green";
+      ctx.fillStyle = player.color;
       ctx.fillRect(player.x, player.y, player.width, player.height);
     },
     update() {
@@ -84,7 +95,7 @@ function createEnemy() {
     y: 40,
     width: 10,
     height: 40,
-    color: "red",
+    color: "#eeeeee",
     gravity: 0.3,
     speed: 0,
     spawnEnemy: [],
@@ -144,6 +155,8 @@ function createEnemy() {
 const bcg = {
   draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#393e46";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   },
 };
 
@@ -152,7 +165,7 @@ const floor = {
   y: canvas.height - 150,
   width: canvas.width,
   height: 150,
-  color: "black",
+  color: "#222831",
   draw() {
     ctx.fillStyle = floor.color;
     ctx.fillRect(floor.x, floor.y, floor.width, floor.height);
@@ -164,9 +177,9 @@ function createScore() {
   const scoreGame = {
     score: 0,
     draw() {
-      ctx.font = "50px Verdana";
+      ctx.font = "50px Montserrat";
       ctx.textAlign = "center";
-      ctx.fillStyle = "black";
+      ctx.fillStyle = "#eeeeee";
       ctx.fillText(scoreGame.score, canvas.width / 2, 60);
     },
     update() {},
@@ -178,9 +191,9 @@ function createScore() {
 function createGameOverScreen() {
   const gameOverScreen = {
     draw() {
-      ctx.font = "35px Verdana";
+      ctx.font = "35px Montserrat";
       ctx.textAlign = "center";
-      ctx.fillStyle = "black";
+      ctx.fillStyle = "#eeeeee";
       ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2);
       ctx.fillText(
         `Score: ${globalAux.score.score}`,
@@ -200,7 +213,6 @@ function createGameOverScreen() {
 const screen = {
   START: {
     begin() {
-      frame = 0;
       ctx.clearRect(0, 0, canvas.width, canvas.height); // limpando a tela quando iniciado o jogo
       globalAux.startScreen = createTitleScreen();
     },
@@ -214,6 +226,7 @@ const screen = {
   },
   GAME: {
     begin() {
+      frame = 0;
       ctx.clearRect(0, 0, canvas.width, canvas.height); // limpando a tela quando iniciado o jogo
       globalAux.difficulty = createDifficulty();
       globalAux.player = createPlayer();
