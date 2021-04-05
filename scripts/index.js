@@ -2,17 +2,19 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+// variavel para saber o frame atual do jogo
 let frame = 0;
 
 // variável global auxiliar para ter acesso aos objetos criados em outras funções
 const globalAux = {};
 
+// função que controla a dificuldade do jogo
 function createDifficulty() {
   const dif = {
-    interval: 60,
+    interval: 60, // dificuldade fácil
     checkInterval() {
-      if (frame > 500 && frame < 1000) dif.interval = 40;
-      if (frame > 1000) dif.interval = 20;
+      if (frame > 500 && frame < 1000) dif.interval = 40; // dificuldade média
+      if (frame > 1000) dif.interval = 20; // dificuldade dificil
     },
     update() {
       this.checkInterval();
@@ -21,6 +23,7 @@ function createDifficulty() {
   return dif;
 }
 
+// tela de inicio
 function createTitleScreen() {
   const titleScreen = {
     draw() {
@@ -61,10 +64,12 @@ function createPlayer() {
         player.x -= player.speed;
       }
     },
+    // determina a direção que o player irá se mover
     changeDirection() {
       if (player.direction === "D") player.direction = "E";
       else if (player.direction === "E") player.direction = "D";
     },
+    // verifica se há colisão com as paredes do canvas, se sim inverte sua direção
     checkWall() {
       if (player.x + player.width >= canvas.width) player.direction = "E";
       if (player.x <= 0) player.direction = "D";
@@ -98,7 +103,6 @@ function createEnemy() {
       });
     },
     update() {
-      console.log(globalAux.difficulty.interval);
       // a cada x tempo instancia um novo inimigo numa posição random em X
       const intervalFrame = frame % globalAux.difficulty.interval === 0;
       if (intervalFrame) {
@@ -136,6 +140,7 @@ function createEnemy() {
   return enemy;
 }
 
+// background
 const bcg = {
   draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -169,6 +174,7 @@ function createScore() {
   return scoreGame;
 }
 
+// tela de game over
 function createGameOverScreen() {
   const gameOverScreen = {
     draw() {
@@ -246,6 +252,7 @@ const screen = {
   },
 };
 
+// evento de clique que se adequa a cada tela
 window.addEventListener("click", () => {
   if (currentScreen.click) currentScreen.click();
 });
