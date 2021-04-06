@@ -5,6 +5,7 @@ body {
   align-items: center;
   background-color: #222831;
   margin: 0;
+  user-select: none;
 }
 
 div {

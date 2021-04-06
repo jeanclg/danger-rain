@@ -2,6 +2,11 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+// musica de fundo do jogo
+const gameMusic = new Audio();
+gameMusic.src = "/assets/sounds/bensound-dreams.mp3";
+gameMusic.volume = 0.15;
+
 // variavel para saber o frame atual do jogo
 let frame = 0;
 
@@ -226,12 +231,14 @@ const screen = {
   },
   GAME: {
     begin() {
+      gameMusic.play();
       frame = 0;
       ctx.clearRect(0, 0, canvas.width, canvas.height); // limpando a tela quando iniciado o jogo
       globalAux.difficulty = createDifficulty();
       globalAux.player = createPlayer();
       globalAux.enemy = createEnemy();
       globalAux.score = createScore();
+      bcg.begin();
     },
     draw() {
       bcg.draw();
@@ -252,6 +259,8 @@ const screen = {
   },
   GAMEOVER: {
     begin() {
+      gameMusic.pause(); // parando o som quando chega na tela de game over
+      gameMusic.currentTime = 0; // resetando o som para começar do início quando reiniciado o jogo
       ctx.clearRect(0, 0, canvas.width, canvas.height); // limpando a tela quando iniciado o jogo
       globalAux.gameOver = createGameOverScreen();
     },
