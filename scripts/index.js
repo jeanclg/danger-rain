@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 
 // musica de fundo do jogo
 const gameMusic = new Audio();
-gameMusic.src = "/assets/sounds/bensound-dreams.mp3";
+gameMusic.src = "./assets/sounds/bensound-dreams.mp3";
 gameMusic.volume = 0.15;
 
 // variavel para saber o frame atual do jogo
