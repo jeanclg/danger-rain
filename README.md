@@ -1,7 +1,7 @@
 # Danger Rain
 
 Built in HTML, CSS, and JavaScript.
-Play the game [HERE](https://khan.github.io/KaTeX/).
+Play the game [HERE](https://jeanclg.github.io/danger-rain/).
 
 ## ABOUT THE GAME
 
