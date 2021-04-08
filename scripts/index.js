@@ -29,10 +29,6 @@ window.addEventListener("load", () => {
     return dif;
   }
 
-  function teste() {
-    null;
-  }
-
   // tela de inicio
   function createTitleScreen() {
     const titleScreen = {
