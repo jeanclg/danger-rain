@@ -30,7 +30,7 @@ window.addEventListener("load", () => {
   }
 
   function teste() {
-    null;
+    return "teste";
   }
 
   // tela de inicio
