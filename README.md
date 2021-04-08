@@ -1,7 +1,7 @@
 # Danger Rain
 
 Built in HTML, CSS, and JavaScript.
-Play the game [HERE](https://khan.github.io/KaTeX/).
+Play the game [HERE](https://jeanclg.github.io/danger-rain/).
 
 ## ABOUT THE GAME
 
@@ -10,3 +10,7 @@ Play the game [HERE](https://khan.github.io/KaTeX/).
 ## HOW TO PLAY
 
 You just need to click on the screen to change the player's direction and avoid the rain.
+
+## MORE INFO
+
+You can see more of this project clicking [HERE](https://slides.com/jeancarlosleogarcia/deck).
