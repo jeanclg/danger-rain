@@ -29,8 +29,13 @@ window.addEventListener("load", () => {
     return dif;
   }
 
+  let test = [0];
   function teste() {
+<<<<<<< HEAD
     return "teste";
+=======
+    return test;
+>>>>>>> gh-pages
   }
 
   // tela de inicio
