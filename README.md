@@ -10,3 +10,7 @@ Play the game [HERE](https://jeanclg.github.io/danger-rain/).
 ## HOW TO PLAY
 
 You just need to click on the screen to change the player's direction and avoid the rain.
+
+## MORE INFO
+
+You can see more of this project clicking [HERE](https://slides.com/jeancarlosleogarcia/deck).
